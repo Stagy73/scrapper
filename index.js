@@ -47,8 +47,17 @@ async function scrapeJobOffers() {
 }
 
 function saveJobOffersToFile(jobOffers) {
-  const json = JSON.stringify(jobOffers, null, 2);
-  fs.writeFile("job-offers.json", json, "utf8", (error) => {
+  let formattedJobOffers = "";
+
+  jobOffers.forEach((jobOffer, index) => {
+    const { jobTitle, location, offerLink, description } = jobOffer;
+    const formattedJobOffer = `(${
+      index + 1
+    }, "${jobTitle}", "${location}", "${offerLink}", "${description}")\n`;
+    formattedJobOffers += formattedJobOffer;
+  });
+
+  fs.writeFile("job-offers.txt", formattedJobOffers, "utf8", (error) => {
     if (error) {
       console.error("Failed to save job offers to file.");
     } else {
